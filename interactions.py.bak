@@ -1,0 +1,37 @@
+
+import numpy as np 
+from dynamics_utils import Phase
+
+
+class interactions:
+
+    def RepulsionLin(self,OutputVelocity,Phase,V_Rep_l,p_l,R_0_l,WhichAgent,Dim_l,normlize):
+
+       OutputVelocity = np.zeros((1,3),dtype = float)
+       AgentsCoordinates = Phase.Coordinates[WhichAgent]
+
+       DifferenceVector = np.zeros((1,3),dtype = float) 
+
+       for i in range(Phase.NumberOfAgents):
+           if (i == WhichAgent):
+               continue
+            
+            NeighbourCoordinates = Phase.Coordinate[i]
+            DifferenceVector = AgentsCoordinates - NeighbourCoordinates
+
+
+
+
+    
+    def SigmoidLin(self,x,p,v_max,r0) 
+        '''
+        对应文章中的斥力部分的计算公式
+        v_rep = p_rep*(r_0_rep-r_ij)
+        '''
+        self.vel = (r0-x) * p
+        if (p<=0 || vel<=0)
+            return 0
+        if (vel >= v_max)
+            return v_max
+        return vel 
+        

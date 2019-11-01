@@ -71,7 +71,37 @@ class algo:
                                              WhichAgent, self.Dim)
 
         # 与墙的交互
-        ArenaVelocity = arena.Shill_Wall_LinSqrt(Phase, self.ArenaCenterX, self.ArenaCenterY, self.ArenaRadius, self.Arenas.a[self.ArenaShape], self.V_Shill, self.R_0_Shill, self.Acc_Shill)
+        ArenaVelocity = arena.Shill_Wall_LinSqrt(Phase, self.ArenaCenterX, self.ArenaCenterY, self.ArenaRadius,
+                                                 self.Arenas.a[self.ArenaShape], self.V_Shill, self.R_0_Shill,
+                                                 self.Acc_Shill, self.R_0_Shill, self.Acc_Shill, self.Slope_Shill, WhitchAgent, self.Dim)
+
+        # 与障碍物交互，暂时不添加
+
+        OutputVelocity = M.VectSum(OutputVelocity, NormalizedAgentsVelocity)
+        OutputVelocity = M.VectSum(OutputVelocity, PotentialVelocity)
+        OutputVelocity = M.VectSum(OutputVelocity, SlipVelocity)
+        OutputVelocity = M.VectSum(OutputVelocity, ArenaVelocity)
+
+        # 输出速度大于最大速度则使用最大速度 存疑
+        CutOffMode = False
+        if CutOffMode is False:
+            OutputVelocity = M.UnitVect(OutputVelocity)
+            OutputVelocity = M.MultiplicateWithScalar(OutputVelocity, self.V_Flock, (int)Dim)
+        else:
+            if M.VectAbs(OutputVelocity) > self.V_Max:
+                OutputVelocity = M.UnitVect(OutputVelocity)
+                OutputVelocity = M.MultiplicateWithScalar(OutputVelocity, self.V_Max, (int)Dim)
+
+        return OutputVelocity
+
+            
+
+
+
+        
+
+
+
 
 
         

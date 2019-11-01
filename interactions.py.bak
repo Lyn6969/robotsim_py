@@ -22,7 +22,7 @@ class interactions:
 
 
 
-    
+
     def SigmoidLin(self,x,p,v_max,r0) 
         '''
         对应文章中的斥力部分的计算公式

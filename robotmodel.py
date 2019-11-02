@@ -148,7 +148,7 @@ class robotmodel:
         for i in range(SitParams.NumberOfAgents):
             CheckVeAccelerationCache = Phase.GetAgentsVelocity(LocalActualPhase, i)
             CheckVelocityCache = Phase.GetAgentsVelocity(SteppedPhase, i)
-            CheckDiffrenceCache = 
+            CheckDiffrenceCache = dadf 
 
         
 

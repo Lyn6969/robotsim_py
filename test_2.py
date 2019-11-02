@@ -1,5 +1,5 @@
 
-
+import numpy as np
 class unit_param_double_t:
 
     def __init__(self):
@@ -49,12 +49,28 @@ class test():
 
     def tt(self, a, b):
 
-        a = a+b 
+        c = a + b
+        print(c)
+        a = c
+
+
+    def InsertAgentsVelocity(self, Phase, Velocity):
+        for j in range(3):
+            Phase[j] = Velocity[j]
 
 
 
-t = unit_model_params_t()
+t = test()
 
-t.Sigma_GPS_XY.Value = 5
+Phase = np.zeros(3)
+Velocity = np.ones(3)
 
-print(t.Sigma_GPS_XY.Value)
+a = 1
+b = 1
+
+
+print(t.tt(a,b))
+
+
+t.InsertAgentsVelocity(Phase,Velocity)
+print(Phase)

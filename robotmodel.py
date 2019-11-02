@@ -87,7 +87,7 @@ class robotmodel:
              ConditionReset, Collosions, AgentsInDanger, Accelerations):
 
         CheckVelocityCache = np.zeros(3)
-        CheckVeAccelerationCache = np.zeros(3)
+        CheckAccelerationCache = np.zeros(3)
         CheckDiffrenceCache = np.zeros(3)
         UnitVectDifference = np.zeros(3)
 
@@ -146,9 +146,23 @@ class robotmodel:
         OnePerDeltaT = 1.0 / SitParams.DeltaT
         
         for i in range(SitParams.NumberOfAgents):
-            CheckVeAccelerationCache = Phase.GetAgentsVelocity(LocalActualPhase, i)
+            CheckAccelerationCache = Phase.GetAgentsVelocity(LocalActualPhase, i)
             CheckVelocityCache = Phase.GetAgentsVelocity(SteppedPhase, i)
-            CheckDiffrenceCache = dadf 
+            CheckDiffrenceCache = M.VectDifference(CheckVelocityCache, CheckAccelerationCache)
+            UnitVectDifference = M.UnitVect(CheckVeAccelerationCache)
+
+            Accelerations[i] = M.VectAbs(CheckDiffrenceCache) * OnePerDeltaT  # 一秒钟的加速度
+
+            if Accelerations[i] > UnitParams.a_max.Value:
+                for k in range(3):
+                    CheckAccelerationCache[k] = CheckAccelerationCache[k] + UnitParams.a_max.Value * SitParams.DeltaT * UnitVectDifference[k] 
+
+            
+            
+
+
+
+
 
         
 

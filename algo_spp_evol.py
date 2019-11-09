@@ -67,16 +67,18 @@ class algo:
 
         # 引力项
         SlipVelocity = inter.FrictionLinSqrt(Phase, self.C_Frict, self.V_Frict, self.Acc_Frict,
-                                             self.Slope_Frict, self.R_0+self.R_0_Offset_Frict
+                                             self.Slope_Frict, self.R_0+self.R_0_Offset_Frict,
                                              WhichAgent, self.Dim)
 
         # 与墙的交互
-        ArenaVelocity = arena.Shill_Wall_LinSqrt(Phase, self.ArenaCenterX, self.ArenaCenterY, self.ArenaRadius,
-                                                 self.Arenas.a[self.ArenaShape], self.V_Shill, self.R_0_Shill,
-                                                 self.Acc_Shill, self.R_0_Shill, self.Acc_Shill, self.Slope_Shill, WhitchAgent, self.Dim)
+        # ArenaVelocity = arena.Shill_Wall_LinSqrt(Phase, self.ArenaCenterX, self.ArenaCenterY, self.ArenaRadius,
+        #                                          self.Arenas.a[self.ArenaShape], self.V_Shill, self.R_0_Shill,
+        #                                          self.Acc_Shill, self.R_0_Shill, self.Acc_Shill, self.Slope_Shill, WhitchAgent, self.Dim)
 
         # 与障碍物交互，暂时不添加
 
+
+        # 最终结果
         OutputVelocity = M.VectSum(OutputVelocity, NormalizedAgentsVelocity)
         OutputVelocity = M.VectSum(OutputVelocity, PotentialVelocity)
         OutputVelocity = M.VectSum(OutputVelocity, SlipVelocity)
@@ -86,11 +88,11 @@ class algo:
         CutOffMode = False
         if CutOffMode is False:
             OutputVelocity = M.UnitVect(OutputVelocity)
-            OutputVelocity = M.MultiplicateWithScalar(OutputVelocity, self.V_Flock, (int)Dim)
+            OutputVelocity = M.MultiplicateWithScalar(OutputVelocity, self.V_Flock, self.Dim)
         else:
             if M.VectAbs(OutputVelocity) > self.V_Max:
                 OutputVelocity = M.UnitVect(OutputVelocity)
-                OutputVelocity = M.MultiplicateWithScalar(OutputVelocity, self.V_Max, (int)Dim)
+                OutputVelocity = M.MultiplicateWithScalar(OutputVelocity, self.V_Max, self.Dim)
 
         return OutputVelocity
 

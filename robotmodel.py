@@ -4,15 +4,41 @@ from interactions import interactions as inter
 from arenas import arena 
 from arenas import arenas_t
 from dynamics_utils import Phase
-from algo_spp_evol import algo 
+from algo_spp_evol import algo
+from dynamics_utils import Phase
 
 '''
 真实无人集群个体模型
 '''
-SteppedPhase = Phase()
-NubmerOfNeighbours = 0
 
 class robotmodel:
+
+    def __init__(self):
+
+        self.PreferredVelocities = 0
+        self.SteppedPhase = 0
+        self.NubmerOfNeighbours = 0
+        self.TempPhase = 0
+
+
+
+
+
+    def InitializePreferredVelocities(self, phase, FlockingParams, SitParams, UnitParams):
+
+        self.PreferredVelocities = np.zeros((SitParams.NumberOfAgents, 3), dtype =float)   # 期望速度速度信息
+
+        for i in range(SitParams.NumberOfAgents):
+            for j in range(3):
+                self.PreferredVelocities[i][j] = 0.0
+        
+        self.SteppedPhase = Phase(SitParams.NumberOfAgents, phase.NumberOfInnerStates)
+        self.TempPhase = Phase(SitParams.NumberOfAgents, phase.NumberOfInnerStates)
+        
+
+        
+
+        
 
 
     # 欧拉法求解运动学
@@ -156,7 +182,35 @@ class robotmodel:
             if Accelerations[i] > UnitParams.a_max.Value:
                 for k in range(3):
                     CheckAccelerationCache[k] = CheckAccelerationCache[k] + UnitParams.a_max.Value * SitParams.DeltaT * UnitVectDifference[k] 
+                
+                Phase.InsertAgentsVelocity(SteppedPhase, CheckVelocityCache, i)
+                Accelerations[i] = UnitParams.a_max.Value
 
+        # 外部噪声
+
+        # 重置智能体位置
+
+
+        # 将相写入相空间
+        for j in range(SitParams.NumberOfAgents):
+            for i in range(3):
+                OutputPhase.Coordinates[j][i] = SteppedPhase.Coordinates[j][i]
+                OutputPhase.Velocities[j][i] = SteppedPhase.Velocities[j][i]
+            for i in range(SteppedPhase.NumberOfInnerStates):
+                OutputPhase.InnerStates[j][i] = SteppedPhase.InnerStates[j][i] 
+            
+
+
+
+
+
+
+        
+
+
+
+
+            
             
             
 

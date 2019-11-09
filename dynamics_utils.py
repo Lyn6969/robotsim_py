@@ -81,12 +81,6 @@ class Phase:
 
         Phase.RealIDs[i], Phase.RealIDs[j] = Phase.RealIDs[j], Phase.RealIDs[i]
 
-
-
-
-
-
-
     # 将在附近的个体放到第一梯队中
     def SelectNearbyVisibleAgents(self, Phase, ReferencePosition, Range, PacketLossQuadraticCoeff):
 

@@ -59,16 +59,16 @@ class Phase:
         return Collisions
 
     # 将位置输入Phase
-    def InsertAgentsCoordinates(self, Phase, Coords, WhitchAgent):
+    def InsertAgentsCoordinates(self, phase, Coords, WhitchAgent):
 
         for j in range(3):
-            Phase.Coordinates[WhitchAgent][i] = Coords[j]
+            phase.Coordinates[WhitchAgent][j] = Coords[j]
     
     # 将速度输入Phase
-    def InsertAgentsVelocity(self, Phase, Velocity, WhitchAgent):
+    def InsertAgentsVelocity(self, phase, Velocity, WhitchAgent):
 
         for j in range(3):
-            Phase.Velocities[WhitchAgent][j] = Velocity[j]
+            phase.Velocities[WhitchAgent][j] = Velocity[j]
 
     # 交换状态
     def SwapAgents(self, Phase, i, j):

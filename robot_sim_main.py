@@ -7,12 +7,14 @@ from param_utils import flocking_model_params_t as fl
 from param_utils import flocking_params_test as fl_test
 from param_utils import unit_model_params_t as unit
 from robotmodel import robotmodel 
-
+import random 
 
 
 
 
 model = robotmodel()
+M = math_utils()
+P = Phase() # 函数调用
 # 定义系统参数
 ActualSitParams = sit()
 
@@ -74,7 +76,7 @@ if __name__ == '__main__':
     ActualSitParams.Length = 600
     ActualSitParams.InitialX = 30000
     ActualSitParams.InitialY = 30000
-    ActualSitParams.InitialZ = 30000
+    ActualSitParams.InitialZ = 0.0
     ActualSitParams.DeltaT = 0.01
     ActualSitParams.Radius = 300
     ActualSitParams.LengthToStore = 15
@@ -108,6 +110,77 @@ if __name__ == '__main__':
         i = False
     
     model.InitializePreferredVelocities(ActualPhase, ActualFlockingParams, ActualSitParams, ActualUnitParams)
+
+    # 初始化位置
+
+    MaxStep = 100 * PhaseData[0].NumberOfAgents
+
+
+    RandomPlaceVector = M.Fillvect(27000,27000,27000)
+    ActualAgentsVelocity = M.Fillvect(0, 0, 0)
+
+    isArrangementCorrect = False
+
+    for i in range(PhaseData[0].NumberOfAgents):
+        PhaseData[0].InsertAgentsCoordinates(PhaseData[0], RandomPlaceVector, i)
+        PhaseData[0].InsertAgentsVelocity(PhaseData[0],ActualAgentsVelocity, i)
+
+    for i in range(PhaseData[0].NumberOfAgents):
+        while isArrangementCorrect is False:
+            isArrangementCorrect = True
+
+            RandomPlaceVector[0] = random.uniform(-ActualSitParams.InitialX / 2.0, ActualSitParams.InitialX /2.0)
+            RandomPlaceVector[1] = random.uniform(-ActualSitParams.InitialY / 2.0, ActualSitParams.InitialY /2.0)
+            RandomPlaceVector[2] = random.uniform(-ActualSitParams.InitialZ / 2.0, ActualSitParams.InitialZ /2.0)
+
+            for j in range(PhaseData[0].NumberOfAgents):
+                if i == j:
+                    j = PhaseData[0].NumberOfAgents - 1
+                    continue
+                AgentjsCoords = PhaseData[0].GetAgentsCoordinates(PhaseData[0], j)
+                DiffCoords = M.VectDifference(AgentjsCoords, RandomPlaceVector)
+                if (M.VectAbs(DiffCoords) <= 4 * ActualSitParams.Radius):
+                    isArrangementCorrect = False
+                    break
+
+        PhaseData[0].InsertAgentsCoordinates(PhaseData[0], RandomPlaceVector, i)
+        PhaseData[0].InsertAgentsVelocity(PhaseData[0], ActualAgentsVelocity, i)
+        isArrangementCorrect = False
+
+    # 赋值给当前Phase
+    for i in range(ActualSitParams.NumberOfAgents):
+        for j in range(3):
+            ActualPhase.Velocities[i][j] = PhaseData[0].Velocities[i][j]
+            ActualPhase.Coordinates[i][j] = PhaseData[0].Coordinates[i][j]
+
+    # 初始化场地，根据场地初始化位置
+    
+            
+
+    
+    print(PhaseData[0].Coordinates)
+    print(ActualPhase.Coordinates)
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
 
 

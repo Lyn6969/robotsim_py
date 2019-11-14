@@ -62,7 +62,7 @@ class sit_parameters_t:
         self.Length = 0
 
         # 欧拉方法的步长
-        self.DeltaT = 0
+        self.DeltaT = 0.0
 
         # 无人机的避险半径
         self.Radius = 0

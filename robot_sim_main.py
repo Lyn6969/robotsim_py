@@ -154,12 +154,31 @@ if __name__ == '__main__':
             ActualPhase.Coordinates[i][j] = PhaseData[0].Coordinates[i][j]
 
     # 初始化场地，根据场地初始化位置
-    
-            
+
+    # InitializePhase()
+
+    # 填充时间线
+    TimeToWait = 5.0 + ActualSitParams.DeltaT
+    print((int)(TimeToWait / ActualSitParams.DeltaT))
+    for i in range(1, (int)((1+TimeToWait) / ActualSitParams.DeltaT)):
+        for j in range(PhaseData[0].NumberOfAgents):
+            for k in range(3):
+                PhaseData[i].Coordinates[j][k] = PhaseData[i-1].Coordinates[j][k]
+                PhaseData[i].Velocities[j][k] = 0.0
+            for k in range(PhaseData[0].NumberOfInnerStates):
+                PhaseData[i].InnerStates[j][k] = PhaseData[i-1].InnerStates[j][k]
+        print("第%d个的位置为：\r\n" % i, PhaseData[i].Coordinates)
+
+
+
+
 
     
-    print(PhaseData[0].Coordinates)
-    print(ActualPhase.Coordinates)
+    
+
+    
+    # print(PhaseData[0].Coordinates)
+    # print(ActualPhase.Coordinates)
 
 
 

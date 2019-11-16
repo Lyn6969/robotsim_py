@@ -10,9 +10,16 @@ from math_utils import math_utils
 
 M = math_utils()
 
+
 class interactions:
 
-    def RepulsionLin(self, Phase, V_Rep_l, p_l, R_0_l, WhichAgent, Dim_l, normlize):   # 斥力
+    def RepulsionLin(self, Phase, V_Rep_l, p_l, R_0_l, WhichAgent, Dim_l, normlize):
+        '''
+        斥力作用函数
+        
+        :Phase: 状态空间
+        :
+        '''
 
         n = 0
         OutputVelocity = np.zeros(3)

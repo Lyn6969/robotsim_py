@@ -11,10 +11,10 @@ from arenas import arenas_t
 
 class algo:
 
-    def __init__(self, V_Flock, V_Max, V_Rep, R_0, Slope_Rep, C_Frict, V_Frict,
-                 R_0_Offset_Frict, Slope_Frict, Acc_Frict, V_Shill, Acc_Shill,
-                 Slope_Shill, R_0_SHill, Dim, ArenaRadius, ArenaShape,  ArenaCenterX, 
-                 ArenaCenterY):
+    def __init__(self, V_Flock = 400.0, V_Max=800.0, V_Rep=619.664, R_0=2566.68, Slope_Rep=0.4, C_Frict=0.023802, V_Frict=50,
+                 R_0_Offset_Frict=10000.0, Slope_Frict=0.4, Acc_Frict=250.0, V_Shill=652.174, Acc_Shill=250.0,
+                 Slope_Shill=0.4, R_0_SHill=0, Dim=2, ArenaRadius=40000, ArenaShape=1,  ArenaCenterX=-5717.00, 
+                 ArenaCenterY=-18249.8599):
         
         # 场地结构
         self.Arenas = arenas_t()
@@ -50,7 +50,7 @@ class algo:
         self.ArenaCenterX = ArenaCenterX
         self.ArenaCenterY = ArenaCenterY
 
-    def CalulatePreferredVelocity(self, Phase, WhitchAgent, FlockingParams, VizParams, Delay, ActualTime):
+    def CalulatePreferredVelocity(self, Phase, WhitchAgent, FlockingParams, Delay, ActualTime):
         OutputVelocity = np.zeros(3)
 
         AgentCoordinates = Phase.Coordinates[WhitchAgent]

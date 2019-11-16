@@ -24,10 +24,10 @@ class unit_model_params_t:
         self.t_GPS = 0
 
         # 通信延迟
-        self.t_del = 0
+        self.t_del = 0.0
 
         # 通信范围
-        self.R_C = 0
+        self.R_C = 0.0
 
         # 丢包率相关
         self.packet_loss_ratio = 0

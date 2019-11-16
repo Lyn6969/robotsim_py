@@ -1,8 +1,8 @@
 import numpy as np
-from math_utils import math_utils as M 
+from math_utils import math_utils 
 import random
 
-
+math_fun = math_utils()
 
 class Phase:
 
@@ -12,7 +12,7 @@ class Phase:
         self.Velocities = np.zeros((NumberOfAgents, 3), dtype=float)   # 速度信息
         self.InnerStates = np.zeros((NumberOfAgents, NumberOfInnerStates),
                             dtype=float)  # 个体情况信息
-        self.RealIDs = np.zeros((NumberOfAgents, 1), dtype=int) 
+        self.RealIDs = np.zeros(NumberOfAgents) 
         self.NumberOfInnerStates = NumberOfInnerStates 
 
         for i in range(NumberOfAgents):
@@ -48,9 +48,9 @@ class Phase:
                     if i != j:
                         ithAgentsCoordinates = self.GetAgentsCoordinates(ActualPhase, i)
                         jthAgentsCoordinates = self.GetAgentsCoordinates(ActualPhase, j)
-                        RelativeCoordinates = M.VectDifference(ithAgentsCoordinates, jthAgentsCoordinates)
+                        RelativeCoordinates = math_fun.VectDifference(ithAgentsCoordinates, jthAgentsCoordinates)
 
-                        if M.VectAbs(RelativeCoordinates) <= RadiusOfCopter:
+                        if math_fun.VectAbs(RelativeCoordinates) <= RadiusOfCopter:
                             AgentsInDanger[j] = True
                             AgentsInDanger[i] = True
                         
@@ -69,6 +69,12 @@ class Phase:
 
         for j in range(3):
             phase.Velocities[WhitchAgent][j] = Velocity[j]
+
+    def insert_phase_to_dataline(phasedata, phase, whitchstep):
+        for i in range(phase.NumberOfAgents):
+            for j in range(3):
+                phasedata[whitchstep].Coordinates[i][j] = phase.Coordinates[i][j]
+                phasedata[whitchsteo].Velocities[i][j] = phase.Velocities[i][j]
 
     # 交换状态
     def SwapAgents(self, Phase, i, j):
@@ -92,9 +98,9 @@ class Phase:
 
         while(i >= NumberOfNearbyAgents):
             DistFromRef = Phase.GetAgentsCoordinates(Phase, i)
-            DistFromRef = M.VectDifference(DistFromRef, ReferencePosition)
+            DistFromRef = math_fun.VectDifference(DistFromRef, ReferencePosition)
 
-            Dist = M.VectAbs(DistFromRef)
+            Dist = math_fun.VectAbs(DistFromRef)
 
             packet_lost = random.uniform(0, 1) < Dist * Dist * PacketLossQuadraticCoeff
 

@@ -10,11 +10,9 @@ from robotmodel import robotmodel
 import random 
 
 
-
-
 model = robotmodel()
 M = math_utils()
-P = Phase() # 函数调用
+P = Phase()  # 函数调用
 # 定义系统参数
 ActualSitParams = sit()
 
@@ -25,8 +23,6 @@ ActualFlockingParams = fl_test()
 # 定义个体参数
 
 ActualUnitParams = unit()
-
-
 
 Now = 0 
 TimeStep = 0
@@ -63,9 +59,6 @@ inter = interactions()
 # print(a)
 # math_utils.UnitVect(a[0], 3)
 # print(a)
-
-
-
 
 #------------------------------------------------------------------------------
 
@@ -157,9 +150,9 @@ if __name__ == '__main__':
 
     # InitializePhase()
 
-    # 填充时间线
+    # 填充时间线waiting...
     TimeToWait = 5.0 + ActualSitParams.DeltaT
-    print((int)(TimeToWait / ActualSitParams.DeltaT))
+    # print((int)(TimeToWait / ActualSitParams.DeltaT))
     for i in range(1, (int)((1+TimeToWait) / ActualSitParams.DeltaT)):
         for j in range(PhaseData[0].NumberOfAgents):
             for k in range(3):
@@ -167,16 +160,53 @@ if __name__ == '__main__':
                 PhaseData[i].Velocities[j][k] = 0.0
             for k in range(PhaseData[0].NumberOfInnerStates):
                 PhaseData[i].InnerStates[j][k] = PhaseData[i-1].InnerStates[j][k]
-        print("第%d个的位置为：\r\n" % i, PhaseData[i].Coordinates)
+        #print("第%d个的位置为：\r\n" % i, PhaseData[i].Coordinates)
+
+    # 初始化Now
+    Now = Now + round((5.0 + ActualUnitParams.t_del)/ActualSitParams.DeltaT)
+    TimeBeforeFlock = 10.0 + ActualUnitParams.t_del
+
+    ConditionsReset = [True, True]
+
+    print(Now, TimeBeforeFlock,ConditionsReset)
+
+    # 设置观察参数
+
+    # 开始主循环
+    ElapsedTime = (Now * ActualSitParams.DeltaT) - 5.0 - ActualUnitParams.t_del
+    print(Now, TimeStepsToStore)
+
+    Collisions = 0
+
+    Accelerations = np.zeros(ActualSitParams.NumberOfAgents)
+
+    while(ElapsedTime < ActualSitParams.Length):
+        if Now < TimeStepsToStore:
+            
+            Collisions = model.Step(ActualPhase, PhaseData, ActualUnitParams, ActualFlockingParams, ActualSitParams,
+                       Now, (int)(ElapsedTime/ActualSitParams.DeltaT), True, ConditionsReset, AgentsInDanger, Accelerations)           
+            Phase.insert_phase_to_dataline(PhaseData, ActualPhase, Now + 1 )
+            print(PhaseData[Now+1].Coordinates)
+        else:
+            pass
+
+
+        ElapsedTime += ActualSitParams.DeltaT 
+        Now += 1
 
 
 
 
 
-    
-    
 
-    
+
+
+
+
+
+
+
+
     # print(PhaseData[0].Coordinates)
     # print(ActualPhase.Coordinates)
 

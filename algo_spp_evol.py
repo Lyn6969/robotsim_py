@@ -1,6 +1,6 @@
 import numpy as np 
 from math_utils import math_utils 
-from interactions import interactions as inter 
+from interactions import interactions
 from arenas import arena 
 from arenas import arenas_t
 
@@ -8,6 +8,7 @@ from arenas import arenas_t
 3D 自推进集群模型
 '''
 math_func = math_utils()
+inter_func = interactions()
 
 
 class algo:
@@ -58,18 +59,21 @@ class algo:
         AgentsVelocity = Phase.Velocities[WhitchAgent]
 
         # 自驱动项
+        NormalizedAgentsVelocity = np.zeros(3)
         NormalizedAgentsVelocity = math_func.Fillvect(AgentsVelocity[0], AgentsVelocity[1], AgentsVelocity[2])
         NormalizedAgentsVelocity = math_func.UnitVect(NormalizedAgentsVelocity)
         NormalizedAgentsVelocity = math_func.MultiplicateWithScalar(NormalizedAgentsVelocity, self.V_Flock, self.Dim)
 
+        print(NormalizedAgentsVelocity)
+
         # 斥力项
-        PotentialVelocity = inter.RepulsionLin(Phase, self.V_Rep, self.Slope_Rep, self.R_0,
-                                               WhitchAgent, self.Dim)
+        PotentialVelocity = inter_func.RepulsionLin(Phase, self.V_Rep, self.Slope_Rep, self.R_0,
+                                               WhitchAgent, self.Dim,False)
 
         # 引力项
-        SlipVelocity = inter.FrictionLinSqrt(Phase, self.C_Frict, self.V_Frict, self.Acc_Frict,
+        SlipVelocity = inter_func.FrictionLinSqrt(Phase, self.C_Frict, self.V_Frict, self.Acc_Frict,
                                              self.Slope_Frict, self.R_0+self.R_0_Offset_Frict,
-                                             WhichAgent, self.Dim)
+                                             WhitchAgent, self.Dim)
 
         # 与墙的交互
         # ArenaVelocity = arena.Shill_Wall_LinSqrt(Phase, self.ArenaCenterX, self.ArenaCenterY, self.ArenaRadius,
@@ -83,7 +87,7 @@ class algo:
         OutputVelocity = math_func.VectSum(OutputVelocity, NormalizedAgentsVelocity)
         OutputVelocity = math_func.VectSum(OutputVelocity, PotentialVelocity)
         OutputVelocity = math_func.VectSum(OutputVelocity, SlipVelocity)
-        OutputVelocity = math_func.VectSum(OutputVelocity, ArenaVelocity)
+        # OutputVelocity = math_func.VectSum(OutputVelocity, ArenaVelocity)
 
         # 输出速度大于最大速度则使用最大速度 存疑
         CutOffMode = False
@@ -91,7 +95,7 @@ class algo:
             OutputVelocity = math_func.UnitVect(OutputVelocity)
             OutputVelocity = math_func.MultiplicateWithScalar(OutputVelocity, self.V_Flock, self.Dim)
         else:
-            if M.VectAbs(OutputVelocity) > self.V_Max:
+            if math_func.VectAbs(OutputVelocity) > self.V_Max:
                 OutputVelocity = math_func.UnitVect(OutputVelocity)
                 OutputVelocity = math_func.MultiplicateWithScalar(OutputVelocity, self.V_Max, self.Dim)
 

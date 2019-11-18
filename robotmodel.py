@@ -54,7 +54,7 @@ class robotmodel:
         PreviousVelocity = phase_fun.GetAgentsVelocity(phase, 0)
         OutputInnerStates = np.zeros(3)
         OutputVelocity = np.zeros(3)
-        PreferredVelocities = np.zeros((phase.NumberOfAgents, 3))
+        PreferredVelocities = np.zeros((20, 3)) # 注意数量
 
         for i in range(phase.NumberOfInnerStates):
             OutputInnerStates[i] = phase.InnerStates[0][i]
@@ -67,6 +67,8 @@ class robotmodel:
 
             for i in range(3):
                 PreferredVelocities[WhitchAgent][i] = TempTarget[i]  # 计算应该有的速度s
+                
+            # print("%d秒第%d个Agent的期望速度为:" % (TimeStepLooped, WhitchAgent), PreferredVelocities[WhitchAgent])
 
         for i in range(2):
             OutputVelocity[i] = RealVelocity[i] + (DeltaT / UnitParams.Tau_PID_XY)*(PreferredVelocities[WhitchAgent][i]-PreviousVelocity[i])   # 计算一个时间步XY应该有的速度变化量
@@ -77,9 +79,7 @@ class robotmodel:
 
     # 计算智能体观测到的智能体的相空间，参数可扩展
     def CreatPhase(self, phase, WhitchAgent, R_C, packet_loss_ratio, packet_loss_distance, OderBydistance):
-        LocalActualPhaseToCreate = Phase(phase.NumberOfAgents)
-        LocalActualPhaseToCreate.NumberOfAgents = phase.NumberOfAgents
-        LocalActualPhaseToCreate.NumberOfInnerStates = phase.NumberOfInnerStates
+        LocalActualPhaseToCreate = Phase(phase.NumberOfAgents,phase.NumberOfInnerStates)
 
         for i in range(phase.NumberOfAgents):
 
@@ -170,18 +170,18 @@ class robotmodel:
 
             # 更新InnerStates
 
-            phase_fun.InsertAgentsVelocity(SteppedPhase, CheckVelocityCache, j)
+            phase_fun.InsertAgentsVelocity(self.SteppedPhase, CheckVelocityCache, j)
             for k in range(PhaseData[0].NumberOfInnerStates):
-                SteppedPhase.InnerStates[j][k] = ChangedInnerStateOfActualAgent[k]
+                self.SteppedPhase.InnerStates[j][k] = ChangedInnerStateOfActualAgent[k]
 
         # 在添加噪声之前保存加速度的最大值
         OnePerDeltaT = 1.0 / SitParams.DeltaT
         
         for i in range(SitParams.NumberOfAgents):
             CheckAccelerationCache = phase_fun.GetAgentsVelocity(LocalActualPhase, i)
-            CheckVelocityCache = phase_fun.GetAgentsVelocity(SteppedPhase, i)
+            CheckVelocityCache = phase_fun.GetAgentsVelocity(self.SteppedPhase, i)
             CheckDiffrenceCache = math_fun.VectDifference(CheckVelocityCache, CheckAccelerationCache)
-            UnitVectDifference = math_fun.UnitVect(CheckVeAccelerationCache)
+            UnitVectDifference = math_fun.UnitVect(CheckAccelerationCache)
 
             Accelerations[i] = math_fun.VectAbs(CheckDiffrenceCache) * OnePerDeltaT  # 一秒钟的加速度
 
@@ -189,7 +189,7 @@ class robotmodel:
                 for k in range(3):
                     CheckAccelerationCache[k] = CheckAccelerationCache[k] + UnitParams.a_max * SitParams.DeltaT * UnitVectDifference[k] 
                 
-                phase_fun.InsertAgentsVelocity(SteppedPhase, CheckVelocityCache, i)
+                phase_fun.InsertAgentsVelocity(self.SteppedPhase, CheckVelocityCache, i)
                 Accelerations[i] = UnitParams.a_max
 
         # 外部噪声
@@ -200,10 +200,10 @@ class robotmodel:
         # 将相写入相空间
         for j in range(SitParams.NumberOfAgents):
             for i in range(3):
-                OutputPhase.Coordinates[j][i] = SteppedPhase.Coordinates[j][i]
-                OutputPhase.Velocities[j][i] = SteppedPhase.Velocities[j][i]
-            for i in range(SteppedPhase.NumberOfInnerStates):
-                OutputPhase.InnerStates[j][i] = SteppedPhase.InnerStates[j][i] 
+                OutputPhase.Coordinates[j][i] = self.SteppedPhase.Coordinates[j][i]
+                OutputPhase.Velocities[j][i] = self.SteppedPhase.Velocities[j][i]
+            for i in range(self.SteppedPhase.NumberOfInnerStates):
+                OutputPhase.InnerStates[j][i] = self.SteppedPhase.InnerStates[j][i] 
         
         return Collisions
             

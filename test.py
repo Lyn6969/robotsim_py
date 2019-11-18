@@ -1,7 +1,5 @@
-from param_utils import flocking_params_test 
+import numpy as np 
 
-
-ActualFlockingParams = flocking_params_test()
-
-
-print(ActualFlockingParams.V_Flock)
+a = np.zeros((3,2))
+a[0][0] = 1
+print(a)

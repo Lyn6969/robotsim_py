@@ -16,7 +16,7 @@ class interactions:
     def RepulsionLin(self, Phase, V_Rep_l, p_l, R_0_l, WhichAgent, Dim_l, normlize):
         '''
         斥力作用函数
-        
+
         :Phase: 状态空间
         :
         '''
@@ -51,7 +51,7 @@ class interactions:
             # print(DifferenceVector)
 
             OutputVelocity = M.VectSum(OutputVelocity, DifferenceVector)
-            print(OutputVelocity)
+            # print(OutputVelocity)
 
             if (normlize and n) > 1:
                 length = M.VectAbs(OutputVelocity) / n

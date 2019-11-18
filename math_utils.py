@@ -76,7 +76,7 @@ class math_utils:
     向量乘一个数
     '''
     def MultiplicateWithScalar(self, VectorToMultiplicate, Scalar, Dim):
-        OutputVector = np.zeros(Dim)
+        OutputVector = np.zeros(3)
         for i in range(Dim):
             OutputVector[i] = Scalar * VectorToMultiplicate[i]
         return OutputVector
@@ -106,7 +106,7 @@ class math_utils:
             return vel
         
         vel = math.sqrt(2 * acc * (x-r0) - acc * acc / p / p)
-        if vel >= max:
+        if vel >= v_max:
             return v_max
         return vel
 

@@ -65,10 +65,9 @@ inter = interactions()
 if __name__ == '__main__':
 
     # 定义系统参数
-    ActualSitParams.NumberOfAgents = 50
     ActualSitParams.Length = 600
-    ActualSitParams.InitialX = 30000
-    ActualSitParams.InitialY = 30000
+    ActualSitParams.InitialX = 3000
+    ActualSitParams.InitialY = 3000
     ActualSitParams.InitialZ = 0.0
     ActualSitParams.DeltaT = 0.01
     ActualSitParams.Radius = 300
@@ -96,6 +95,8 @@ if __name__ == '__main__':
     TimeStepsToStore = (int)((20 + ActualSitParams.LengthToStore) / ActualSitParams.DeltaT - 1.0)
 
     PhaseData = [Phase(ActualSitParams.NumberOfAgents, ActualFlockingParams.NumberOfInnerStates)] * (1 + TimeStepsToStore)
+
+
 
     AgentsInDanger = np.zeros(ActualSitParams.NumberOfAgents)
 
@@ -168,42 +169,30 @@ if __name__ == '__main__':
 
     ConditionsReset = [True, True]
 
-    print(Now, TimeBeforeFlock,ConditionsReset)
 
     # 设置观察参数
 
     # 开始主循环
     ElapsedTime = (Now * ActualSitParams.DeltaT) - 5.0 - ActualUnitParams.t_del
-    print(Now, TimeStepsToStore)
+
 
     Collisions = 0
+    print(Collisions)
 
     Accelerations = np.zeros(ActualSitParams.NumberOfAgents)
 
-    while(ElapsedTime < ActualSitParams.Length):
+    while(ElapsedTime < 100):
         if Now < TimeStepsToStore:
             
             Collisions = model.Step(ActualPhase, PhaseData, ActualUnitParams, ActualFlockingParams, ActualSitParams,
                        Now, (int)(ElapsedTime/ActualSitParams.DeltaT), True, ConditionsReset, AgentsInDanger, Accelerations)           
-            Phase.insert_phase_to_dataline(PhaseData, ActualPhase, Now + 1 )
-            print(PhaseData[Now+1].Coordinates)
+            P.insert_phase_to_dataline(PhaseData, ActualPhase, Now + 1 )
+            print(PhaseData[Now+1].Coordinates[0])
         else:
             pass
 
-
         ElapsedTime += ActualSitParams.DeltaT 
         Now += 1
-
-
-
-
-
-
-
-
-
-
-
 
 
 

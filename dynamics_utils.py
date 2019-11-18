@@ -70,11 +70,11 @@ class Phase:
         for j in range(3):
             phase.Velocities[WhitchAgent][j] = Velocity[j]
 
-    def insert_phase_to_dataline(phasedata, phase, whitchstep):
+    def insert_phase_to_dataline(self,phasedata, phase, whitchstep):
         for i in range(phase.NumberOfAgents):
             for j in range(3):
                 phasedata[whitchstep].Coordinates[i][j] = phase.Coordinates[i][j]
-                phasedata[whitchsteo].Velocities[i][j] = phase.Velocities[i][j]
+                phasedata[whitchstep].Velocities[i][j] = phase.Velocities[i][j]
 
     # 交换状态
     def SwapAgents(self, Phase, i, j):
